@@ -110,6 +110,10 @@ queue_t *queue_remove (queue_t **queue, queue_t *elem) {
         (*queue) = elem->next;
     }
 
+    if (queue_size((*queue)) == 1) {
+        (*queue) = NULL;
+    }
+
     (elem->prev)->next = elem->next;
     (elem->next)->prev = elem->prev;
 
