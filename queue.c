@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include "queue.h"
 
+//------------------------------------------------------------------------------
+// Verifica se a fila não existe (se o ponteiro da fila não está apontando para nada)
+// Retorna 1 -> caso não exista, 0 -> caso exista
 int check_queue_null(queue_t **queue) {
     if (queue == NULL) {
         return 1;
@@ -8,6 +11,9 @@ int check_queue_null(queue_t **queue) {
     return 0;
 }
 
+//------------------------------------------------------------------------------
+// Verifica se a fila (existente) está vazia (se o primeiro elemento não existe)
+// Retorna 1 -> caso seja vazia, 0 -> caso não seja
 int check_queue_empty(queue_t **queue) {
     if ((*queue) == NULL) {
         return 1;
@@ -15,6 +21,9 @@ int check_queue_empty(queue_t **queue) {
     return 0;
 }
 
+//------------------------------------------------------------------------------
+// Verifica se o elemento não existe
+// Retorna 1 -> caso elemento não exista, 0 -> caso exista
 int check_element_null(queue_t *elem) {
     if (elem == NULL) {
         return 1;
@@ -22,6 +31,10 @@ int check_element_null(queue_t *elem) {
     return 0;
 }
 
+//------------------------------------------------------------------------------
+// Verifica se um elemento está dentro da fila
+// Percorre a fila comparando cada elemento com o elemento dado, 
+// Retorna 1 -> caso algum elemento dentro da fila === elemento de comparação, 0 -> caso não encontre 
 int check_element_belongs_queue(queue_t *queue_start, queue_t *elem) {
     queue_t *current_element = queue_start;
 
@@ -47,17 +60,23 @@ int check_element_belongs_queue(queue_t *queue_start, queue_t *elem) {
 // - o elemento nao deve estar em outra fila
 void queue_append (queue_t **queue, queue_t *elem) {
     if (check_queue_null(queue)) {
-        fprintf(stderr, "[ERRO] A fila não existe!\n");
+        #ifdef DEBUG
+            perror("[ERRO] A fila não existe!\n");
+        #endif
         return;
     }
 
     if (check_element_null(elem)) {
-        fprintf(stderr, "[ERRO] O elemento não existe!\n");
+        #ifdef DEBUG
+            perror("[ERRO] O elemento não existe!\n");
+        #endif
         return;
     }
 
     if (elem->next != NULL || elem->prev != NULL) {
-        fprintf(stderr, "[ERRO] O elemento pertence a outra fila!\n");
+        #ifdef DEBUG
+            perror("[ERRO] O elemento pertence a outra fila!\n");
+        #endif
         return;
     }
 
@@ -86,22 +105,30 @@ void queue_append (queue_t **queue, queue_t *elem) {
 // Retorno: apontador para o elemento removido, ou NULL se erro
 queue_t *queue_remove (queue_t **queue, queue_t *elem) {
     if (check_queue_null(queue)) {
-        fprintf(stderr, "[ERRO] A fila não existe!\n");
+        #ifdef DEBUG
+            perror("[ERRO] A fila não existe!\n");
+        #endif
         return NULL;
     }
 
     if (check_queue_empty(queue)) {
-        fprintf(stderr, "[ERRO] A fila está vazia!\n");
+        #ifdef DEBUG
+            perror("[ERRO] A fila está vazia!\n");
+        #endif
         return NULL;
     }
 
     if (check_element_null(elem)) {
-        fprintf(stderr, "[ERRO] O elemento não existe!\n");
+        #ifdef DEBUG
+            perror("[ERRO] O elemento não existe!\n");
+        #endif
         return NULL;
     }
 
     if (!check_element_belongs_queue((*queue), elem)) {
-        fprintf(stderr, "[ERRO] O elemento pertence a outra fila!\n");
+        #ifdef DEBUG
+            perror("[ERRO] O elemento pertence a outra fila!\n");
+        #endif
         return NULL;
     }
 
@@ -128,6 +155,9 @@ queue_t *queue_remove (queue_t **queue, queue_t *elem) {
 // Retorno: numero de elementos na fila
 int queue_size (queue_t *queue) {
     if (check_queue_empty(&queue)) {
+        #ifdef DEBUG
+            perror("[ERRO] A fila está vazia!\n");
+        #endif
         return 0;
     }
 
@@ -157,12 +187,16 @@ int queue_size (queue_t *queue) {
 // void print_elem (void *ptr) ; // ptr aponta para o elemento a imprimir
 void queue_print (char *name, queue_t *queue, void print_elem (void*) )  {
     if (check_queue_null(&queue)) {
-        fprintf(stderr, "[ERRO] A fila não existe!\n");
+        #ifdef DEBUG
+            perror("[ERRO] A fila não existe!\n");
+        #endif
         return;
     }
 
     if (check_queue_empty(&queue)) {
-        printf("A fila está vazia!\n");
+        #ifdef DEBUG
+            perror("[ERRO] A fila está vazia!\n");
+        #endif
         return;
     }
 
